@@ -8,5 +8,5 @@ export default defineConfig({
     react(),
     glsl()
   ],
-  base: process.env.VITE_BASE_PATH || "/House_Model",
+  // base: process.env.VITE_BASE_PATH || "/House_Model",
 })

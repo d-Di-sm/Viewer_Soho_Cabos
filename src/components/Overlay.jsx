@@ -1,9 +1,104 @@
+import { useEffect, useState } from 'react'
 import './Overlay.css'
+import { CameraModes, useCharacterCustomization } from '../contexts/CustomizationContext'
+import { Button } from '@mantine/core'
 
-const Overlay = () => {
+const Overlay = ({ onTourClick }) => {
+
+    const [showFloatingPanel, setShowFloatingPanel] = useState(false)
+    const [showModalPanel, setShowModalPanel] = useState(false)
+    const [panelImage, setPanelImage] = useState('/logotipo.png')
+    const [panelTitle, setPanelTitle] = useState('Informacion del proyecto')
+    const [currentMeshName, setCurrentMeshName] = useState(null)
+    const { setIsFloatingPanelActive, setCameraMode, setTipologyResidencias } = useCharacterCustomization()
+
+    //Listen for custom events from Experience component
+    useEffect(() => {
+        const handleAnnotationClick = (event) => {
+            const { image, annotation, meshName } = event.detail
+            setPanelImage(`/${image}`)
+            setPanelTitle(annotation)
+            setCurrentMeshName(meshName)
+            setShowFloatingPanel(true)
+            setIsFloatingPanelActive(true)
+        }
+
+        window.addEventListener('annotation-click', handleAnnotationClick)
+
+        return () => {
+            window.removeEventListener('annotation-click', handleAnnotationClick)
+        }
+
+    }, [setIsFloatingPanelActive])
+
+
+
+
+    //Listen for return from 360 tour
+    useEffect(() => {
+        const handleReturnFrom360 = (event) => {
+            const { meshName } = event.detail
+            
+            // Set camera mode to RESIDENCIAS
+            setCameraMode(CameraModes.RESIDENCIAS)
+            
+            // Activate the tipology for the returned mesh
+            setTipologyResidencias([meshName])
+            
+            // Find the mapping for the mesh
+            const objectMappings = {
+                '2BR_G': {image: './floorplans/Res_G.png', title: 'Two Bedrooms Garden: 140.00 M2'},
+                '2BR': {image: './floorplans/Res_T.png', title: 'Two Bedrooms: 120.00 M2'},
+                '3BR_G': {image: './floorplans/Res_G.png', title: 'Three Bedrooms Garden: 160.00 M2'},
+                '3BR': {image: './floorplans/Res_T.png', title: 'Three Bedrooms: 140.00 M2'},
+                '4BR_T': {image: './floorplans/R_4BR_R.png', title: 'Penthouse Roof: 200.00 M2'},
+                '4BR': {image: './floorplans/R_4BR.png', title: 'Penthouse: 200.00 M2'}
+            }
+            
+            const mapping = objectMappings[meshName]
+            if (mapping) {
+                setPanelImage(`/${mapping.image}`)
+                setPanelTitle(mapping.title)
+                setCurrentMeshName(meshName)
+                setShowFloatingPanel(true)
+                setIsFloatingPanelActive(true)
+            }
+        }
+
+        window.addEventListener('return-from-360', handleReturnFrom360)
+
+        return () => {
+            window.removeEventListener('return-from-360', handleReturnFrom360)
+        }
+
+    }, [setCameraMode, setIsFloatingPanelActive, setTipologyResidencias])
+
+
+
+
+
+
+    const closeFloatingPanel = () => {
+        setShowFloatingPanel(false)
+        setPanelImage('/logotipo.png')
+        setPanelTitle('Informacion del proyecto')
+        setCurrentMeshName(null)
+        setIsFloatingPanelActive(false)
+    }
+
+    const openModalPanel = () => {
+        setShowModalPanel(true)
+    }
+
+    const closeModalPanel = () => {
+        setShowModalPanel(false)
+    }
+
+
 
     return(
         <>
+        
         
         {/* Logotipo del desarrollo */}
         <div className="logo-container">
@@ -13,6 +108,7 @@ const Overlay = () => {
         
 
         
+        {/* ------------------------ */}
         {/* Navigation Words */}
         <div
             style={{
@@ -83,6 +179,65 @@ const Overlay = () => {
         </div>
 
         
+
+        {/* ---------------- */}
+        {/*Floating Panel */}
+        {showFloatingPanel && (
+            <div className="floating-panel">
+                <button className="floating-panel-close" onClick={closeFloatingPanel}>x</button>
+                <div className="floating-panel-content">
+                    <img 
+                        src={panelImage}
+                        alt={panelTitle}
+                        className="floating-panel-image"
+                        onClick={openModalPanel}
+                        style={{ cursor: 'pointer' }}
+                    />
+                    <h3 className="floating-panel-title">{panelTitle}</h3>
+                    <Button
+                    variant="outline"
+                    onClick={currentMeshName === '2BR' ? () => onTourClick(currentMeshName) : null}
+                    disabled={currentMeshName !== '2BR'}
+                    style={{
+                        width:'250px',
+                        marginTop: '15px',
+                        color: 'white',
+                        borderColor: 'rgba(255,255,255,0.5)',
+                        backgroundColor: currentMeshName === '2BR' ? 'rgba(255,255,255,0.5)' : 'rgba(128,128,128,0.3)',
+                        opacity: currentMeshName === '2BR' ? 1 : 0.5,
+                        cursor: currentMeshName === '2BR' ? 'pointer' : 'not-allowed',
+                        '&:hover': {
+                            backgroundColor: currentMeshName === '2BR' ? 'rgba(255,255,255,0.6)' : 'rgba(128,128,128,0.3)'
+                        }
+                    }}
+                >
+                    TOUR
+                </Button>
+                </div>
+            </div>
+        )}
+
+
+
+        {/* ----------------------- */}
+        {/* Modal Panel */}
+        {showModalPanel && (
+            <div className="modal-overlay" onClick={closeModalPanel}>
+                <div className="modal-panel" onClick={(e) => e.stopPropagation()}>
+                    <button className="modal-panel-close" onClick={closeModalPanel}>x</button>
+                    <div className="modal-panel-content">
+                        <img src={panelImage} alt={panelTitle} className="modal-panel-image" />
+                        <h3 className="modal-panel-title">{panelTitle}</h3>
+                    </div>
+                </div>
+            </div>
+        )}
+
+
+
+
+
+
         </>
 
     )
