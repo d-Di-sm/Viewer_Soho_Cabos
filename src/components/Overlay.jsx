@@ -3,6 +3,19 @@ import './Overlay.css'
 import { CameraModes, useCharacterCustomization } from '../contexts/CustomizationContext'
 import { Button } from '@mantine/core'
 
+
+const objectMappings = {
+    '2BR_G': {image: './floorplans/Res_G.png', title: 'Two Bedrooms Garden: 140.00 M2'},
+    '2BR': {image: './floorplans/Res_T.png', title: 'Two Bedrooms: 120.00 M2'},
+    '3BR_G': {image: './floorplans/Res_G.png', title: 'Three Bedrooms Garden: 160.00 M2'},
+    '3BR': {image: './floorplans/Res_T.png', title: 'Three Bedrooms: 140.00 M2'},
+    '4BR_T': {image: './floorplans/R_4BR_R.png', title: 'Penthouse Roof: 200.00 M2'},
+    '4BR': {image: './floorplans/R_4BR.png', title: 'Penthouse: 200.00 M2'}
+}
+
+
+
+
 const Overlay = ({ onTourClick }) => {
 
     const [showFloatingPanel, setShowFloatingPanel] = useState(false)
@@ -45,15 +58,6 @@ const Overlay = ({ onTourClick }) => {
             // Activate the tipology for the returned mesh
             setTipologyResidencias([meshName])
             
-            // Find the mapping for the mesh
-            const objectMappings = {
-                '2BR_G': {image: './floorplans/Res_G.png', title: 'Two Bedrooms Garden: 140.00 M2'},
-                '2BR': {image: './floorplans/Res_T.png', title: 'Two Bedrooms: 120.00 M2'},
-                '3BR_G': {image: './floorplans/Res_G.png', title: 'Three Bedrooms Garden: 160.00 M2'},
-                '3BR': {image: './floorplans/Res_T.png', title: 'Three Bedrooms: 140.00 M2'},
-                '4BR_T': {image: './floorplans/R_4BR_R.png', title: 'Penthouse Roof: 200.00 M2'},
-                '4BR': {image: './floorplans/R_4BR.png', title: 'Penthouse: 200.00 M2'}
-            }
             
             const mapping = objectMappings[meshName]
             if (mapping) {
@@ -195,24 +199,24 @@ const Overlay = ({ onTourClick }) => {
                     />
                     <h3 className="floating-panel-title">{panelTitle}</h3>
                     <Button
-                    variant="outline"
-                    onClick={currentMeshName === '2BR' ? () => onTourClick(currentMeshName) : null}
-                    disabled={currentMeshName !== '2BR'}
-                    style={{
-                        width:'250px',
-                        marginTop: '15px',
-                        color: 'white',
-                        borderColor: 'rgba(255,255,255,0.5)',
-                        backgroundColor: currentMeshName === '2BR' ? 'rgba(255,255,255,0.5)' : 'rgba(128,128,128,0.3)',
-                        opacity: currentMeshName === '2BR' ? 1 : 0.5,
-                        cursor: currentMeshName === '2BR' ? 'pointer' : 'not-allowed',
-                        '&:hover': {
-                            backgroundColor: currentMeshName === '2BR' ? 'rgba(255,255,255,0.6)' : 'rgba(128,128,128,0.3)'
-                        }
-                    }}
-                >
-                    TOUR
-                </Button>
+                        variant="outline"
+                        onClick={objectMappings[currentMeshName] ? () => onTourClick(currentMeshName) : null}
+                        disabled={!objectMappings[currentMeshName]}
+                        style={{
+                            width:'250px',
+                            marginTop: '15px',
+                            color: 'white',
+                            borderColor: 'rgba(255,255,255,0.5)',
+                            backgroundColor: objectMappings[currentMeshName] ? 'rgba(255,255,255,0.5)' : 'rgba(128,128,128,0.3)',
+                            opacity: objectMappings[currentMeshName] ? 1 : 0.5,
+                            cursor: objectMappings[currentMeshName] ? 'pointer' : 'not-allowed',
+                            '&:hover': {
+                                backgroundColor: objectMappings[currentMeshName] ? 'rgba(255,255,255,0.6)' : 'rgba(128,128,128,0.3)'
+                            }
+                        }}
+                    >
+                        TOUR
+                    </Button>
                 </div>
             </div>
         )}

@@ -4,7 +4,7 @@ const CharacterCustomizationContext = createContext({})
 
 export const CameraModes = {
     'BASE': 'BASE',
-    'AEREA': 'AEREA',
+    'MASTERPLAN': 'MASTERPLAN',
     'AMENIDADES': 'AMENIDADES',
     'RESIDENCIAS': 'RESIDENCIAS',
     'CASONA01': 'CASONA01',

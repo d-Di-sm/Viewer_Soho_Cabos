@@ -17,6 +17,212 @@ import Overlay360 from './components/360/Overlay_360.jsx'
 import Interface360 from './components/360/Interface_360.jsx'
 
 
+const tourMappings = {
+  '2BR_G': {
+    folder: '2BR',
+    image: './Im01.png',
+    title: '2 BR Garden',
+    flips: ['B2_FLIP.jpg', 'BA01_FLIP.jpg', 'BA02_FLIP.jpg', 'LI_FLIP.jpg', 'LO_FLIP.jpg', 'MA_FLIP.jpg', 'TE_FLIP.jpg'],
+    hotspots: [
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+    ],
+    hotspotIndexTargets: [
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+      [5, 6],
+      [6, 7],
+      [7, 8],
+    ],
+    labels: [
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+    ]
+  },
+  '2BR': {
+    folder: '2BR',
+    image: './Im02.png',
+    title: '2 BR',
+    flips: ['B2_FLIP.jpg', 'BA01_FLIP.jpg', 'BA02_FLIP.jpg', 'LI_FLIP.jpg', 'LO_FLIP.jpg', 'MA_FLIP.jpg', 'TE_FLIP.jpg'],
+    hotspots: [
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+    ],
+    hotspotIndexTargets: [
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+      [5, 6],
+      [6, 7],
+      [7, 8],
+    ],
+    labels: [
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+    ]
+  },
+  '3BR_G': {
+    folder: '3BR',
+    image: './Im03.png',
+    title: '3 BR Garden',
+    flips: ['B2_FLIP.jpg', 'BA01_FLIP.jpg', 'BA02_FLIP.jpg', 'LI_FLIP.jpg', 'LO_FLIP.jpg', 'MA_FLIP.jpg', 'TE_FLIP.jpg'],
+    hotspots: [
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+    ],
+    hotspotIndexTargets: [
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+      [5, 6],
+      [6, 7],
+      [7, 8],
+    ],
+    labels: [
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+    ]
+  },
+  '3BR': {
+    folder: '3BR',
+    image: './Im04.png',
+    title: '3 BR',
+    flips: ['B2_FLIP.jpg', 'BA01_FLIP.jpg', 'BA02_FLIP.jpg', 'LI_FLIP.jpg', 'LO_FLIP.jpg', 'MA_FLIP.jpg', 'TE_FLIP.jpg'],
+    hotspots: [
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+    ],
+    hotspotIndexTargets: [
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+      [5, 6],
+      [6, 7],
+      [7, 8],
+    ],
+    labels: [
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+    ]
+  },
+  '4BR_T': {
+    folder: '2BR',
+    image: './Im05.png',
+    title: '4 BR Terrace',
+    flips: ['B2_FLIP.jpg', 'BA01_FLIP.jpg', 'BA02_FLIP.jpg', 'LI_FLIP.jpg', 'LO_FLIP.jpg', 'MA_FLIP.jpg', 'TE_FLIP.jpg'],
+    hotspots: [
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+    ],
+    hotspotIndexTargets: [
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+      [5, 6],
+      [6, 7],
+      [7, 8],
+    ],
+    labels: [
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+    ]
+  },
+  '4BR': {
+    folder: '2BR',
+    image: './Im05.png',
+    title: '4 BR',
+    flips: ['B2_FLIP.jpg', 'BA01_FLIP.jpg', 'BA02_FLIP.jpg', 'LI_FLIP.jpg', 'LO_FLIP.jpg', 'MA_FLIP.jpg', 'TE_FLIP.jpg'],
+    hotspots: [
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+      [[50, 0, -100], [250, 0, -100]],
+    ],
+    hotspotIndexTargets: [
+      [1, 2],
+      [2, 3],
+      [3, 4],
+      [4, 5],
+      [5, 6],
+      [6, 7],
+      [7, 8],
+    ],
+    labels: [
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+      ['target01', 'target02'],
+    ]
+  }
+}
+
+
+
+
+
+
 /**
  * Camara Base
  */
@@ -29,9 +235,6 @@ function LogCameraAndTarget () {
 
 
 function App() {
-
-  const imageM = './Im01.png'
-  const titleM = "Dept 2 BR"
 
   const [showRecorrido360, setShowRecorrido360] = useState(false)
   const [returnToMesh, setReturnToMesh] = useState(null)
@@ -92,11 +295,22 @@ function App() {
         </>
       ) : (
         <>
-          <Recorrido360 />
+          {/* <Recorrido360 /> */}
+          <Recorrido360
+            tourFlips={returnToMesh && tourMappings[returnToMesh] ? tourMappings[returnToMesh].flips : undefined}
+            hotspots={returnToMesh && tourMappings[returnToMesh] ? tourMappings[returnToMesh].hotspots : undefined}
+            hotspotIndexTargets={returnToMesh && tourMappings[returnToMesh] ? tourMappings[returnToMesh].hotspotIndexTargets : undefined}
+            labels={returnToMesh && tourMappings[returnToMesh] ? tourMappings[returnToMesh].labels : undefined}
+            folder={returnToMesh && tourMappings[returnToMesh] ? tourMappings[returnToMesh].folder : undefined}
+          />
 
           <Interface360 onReturnClick={handleReturnClick} />
 
-          <Overlay360 panelImage={imageM} panelTitle={titleM} />
+          {/* <Overlay360 panelImage={imageM} panelTitle={titleM} /> */}
+          <Overlay360
+            panelImage={returnToMesh && tourMappings[returnToMesh] ? tourMappings[returnToMesh].image : undefined}
+            panelTitle={returnToMesh && tourMappings[returnToMesh] ? tourMappings[returnToMesh].title : undefined}
+          />
 
         </>
       )}

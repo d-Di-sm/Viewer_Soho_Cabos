@@ -1,11 +1,18 @@
 import { Canvas, useThree, useFrame } from "@react-three/fiber";
 import { OrbitControls, Html, useTexture } from "@react-three/drei";
 import { a, useSpring } from "@react-spring/three";
-import { Suspense, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
+import * as THREE from 'three'
 
 
 function Panorama({ textureUrl, opacity }) {
   const texture = useTexture(textureUrl);
+
+  // Asegurar que las texturas JPG se traten como sRGB
+  if (texture) {
+    texture.colorSpace = THREE.SRGBColorSpace;
+  }
+
   return (
     <a.mesh scale={[-1, 1, 1]}>
       <sphereGeometry args={[500, 60, 40]} />
@@ -55,13 +62,100 @@ function AnimatedCamera({ isTransitioning }) {
   return null;
 }
 
-export default function Recorrido360() {
 
-  const [scene, setScene] = useState("lobby")
-  const [nextScene, setNextScene] = useState(null)
-  const [isTransitioning, setIsTransitioning] = useState(false)
 
-  const scenes = {
+
+
+// Construye escenas dinámicas a partir de la lista de flips y la configuración de hotspots / targets / labels / folder
+function buildScenesFromConfig(flips, hotspotsConfig, hotspotIndexTargets, labelsConfig, folder) {
+  if (!Array.isArray(flips) || flips.length === 0) return null;
+
+  const sceneNames = flips.map((flip) => flip.replace(/\.jpg$/i, ""));
+  const scenes = {};
+  
+  const total = sceneNames.length;
+
+  sceneNames.forEach((name, index) => {
+    const textureFile = flips[index]; // p.ej. "B2_FLIP.jpg"
+
+
+    // const nextIndex1 = (index + 1) % sceneNames.length;
+    // const nextIndex2 = (index + 2) % sceneNames.length;
+
+
+    // Lista de posiciones para esta escena (una por hotspot)
+    const positionsForScene =
+      Array.isArray(hotspotsConfig) && Array.isArray(hotspotsConfig[index])
+        ? hotspotsConfig[index]
+        : [[50, 0, -100], [250, 0, -100]];
+
+    // Lista de índices de destino para esta escena (uno por hotspot)
+    const indexTargetsForScene =
+      Array.isArray(hotspotIndexTargets) && Array.isArray(hotspotIndexTargets[index])
+        ? hotspotIndexTargets[index]
+        : positionsForScene.map((_, i) => (index + i + 1) % total);
+
+    // Lista de labels para esta escena (uno por hotspot)
+    const labelsForScene =
+      Array.isArray(labelsConfig) && Array.isArray(labelsConfig[index])
+        ? labelsConfig[index]
+        : positionsForScene.map(() => "next room");
+
+    const hotspots = positionsForScene.map((pos, i) => {
+      const rawIndexTarget = indexTargetsForScene[i];
+      // Usamos directamente el índice tal como viene en hotspotIndexTargets
+      const targetIdx =
+        typeof rawIndexTarget === "number" ? rawIndexTarget : (index + i + 1);
+
+      return {
+        position: pos || [50, 0, -100],
+        label: labelsForScene[i] || "next room",
+        target: sceneNames[targetIdx],
+      };
+    });
+
+
+
+
+
+
+    scenes[name] = {
+      texture: folder
+        ? `./360/${folder}/${textureFile}`
+        : `./360/${textureFile}`,
+
+      hotspots,
+    };
+  });
+
+  return { scenes, initialScene: sceneNames[0] };
+}
+
+
+
+
+
+
+
+
+
+// export default function Recorrido360() {
+
+//   const [scene, setScene] = useState("lobby")
+//   const [nextScene, setNextScene] = useState(null)
+//   const [isTransitioning, setIsTransitioning] = useState(false)
+
+
+
+// export default function Recorrido360({ tourFlips }) {
+
+export default function Recorrido360({ tourFlips, hotspots, hotspotIndexTargets, labels, folder }) {
+
+
+  // const scenes = {
+
+  // Escenas fijas de ejemplo (fallback si no se reciben flips por props)
+  const staticScenes = {
     lobby: {
       texture: "./360/PANO1_L1.png",
       hotspots: [
@@ -84,6 +178,33 @@ export default function Recorrido360() {
     ],
     },
   };
+
+
+  //////
+  
+  const dynamicConfig = useMemo(
+    // () => buildScenesFromFlips(tourFlips),
+    // [tourFlips]
+
+    () => buildScenesFromConfig(tourFlips, hotspots, hotspotIndexTargets, labels, folder),
+    [tourFlips, hotspots, hotspotIndexTargets, labels, folder]
+
+  );
+
+  const useDynamicScenes = !!dynamicConfig;
+
+  const [scene, setScene] = useState(
+    useDynamicScenes ? dynamicConfig.initialScene : "lobby"
+  );
+  const [nextScene, setNextScene] = useState(null)
+  const [isTransitioning, setIsTransitioning] = useState(false)
+
+  const scenes = useDynamicScenes ? dynamicConfig.scenes : staticScenes;
+
+  ////////
+
+
+
 
   const current = scenes[scene];
   const next = nextScene ? scenes[nextScene] : null;
@@ -128,7 +249,15 @@ export default function Recorrido360() {
 
   return (
     <>
-    <Canvas camera={{ fov: 75, position: [0, 0, 0.1] }}>
+    <Canvas
+      gl={{
+        antialias: true,
+        toneMapping: THREE.ACESFilmicToneMapping,
+        outputColorSpace: THREE.SRGBColorSpace,
+      }}
+      camera={{ fov: 75, position: [0, 0, 0.1] }}
+    >
+      
       <Suspense fallback={null}>
         {/* Panorama actual */}
         <Panorama textureUrl={current.texture} opacity={opacity} />

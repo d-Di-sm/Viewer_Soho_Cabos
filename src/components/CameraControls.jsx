@@ -8,7 +8,7 @@ import { useControls } from 'leva'
 
 
 const cameraPositions = {
-    [CameraModes.AEREA]: {
+    [CameraModes.MASTERPLAN]: {
         position: new THREE.Vector3(95, 110, 205),
         target: new THREE.Vector3(-40,-105,-115),
     },

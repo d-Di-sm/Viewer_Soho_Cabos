@@ -27,9 +27,8 @@ import { CameraModes, useCharacterCustomization } from '../contexts/Customizatio
 
 import { useThree } from '@react-three/fiber'
 import ResidencialAreas from './Building/Residencial_Areas.jsx'
-import AmenidadesTexture02 from './Building/Texture_Test02.jsx'
-import TerrainTexture from './Building/Terrain_Texture.jsx'
 import { EffectComposer } from '@react-three/postprocessing'
+import TerrenoLineasMultiples from '../Curves.jsx'
 
 
 
@@ -130,7 +129,7 @@ const Experience = () => {
             castShadow 
             ref={ directionalLight } 
             position={ [ 10, 10, 15 ] } 
-            intensity={ 4.5 }
+            intensity={ 2.5 }
             shadow-mapSize={ [ 4096, 4096 ] }
             shadow-bias={ -0.005 }
             shadow-camera-near={ 1 }
@@ -145,7 +144,7 @@ const Experience = () => {
 
         {/* Modelos */}
 
-        <TerrainTexture />
+        <Terrain />
 
         <Residencial01 />
 
@@ -156,8 +155,7 @@ const Experience = () => {
 
         <Residencial03 />
 
-        {/* <Amenities /> */}
-        <AmenidadesTexture02 />
+        <Amenities />
 
         <Casona01 />
         <Casona02 />
@@ -170,9 +168,6 @@ const Experience = () => {
 
         <Vegetacion />
 
-
-        {/* Zones Residencias */}
-        {/* <DepResidencias /> */}
         <ResidencialAreas />
 
 
@@ -180,6 +175,9 @@ const Experience = () => {
             <planeGeometry />
             <meshStandardMaterial color="#ffffe5" />
         </mesh>
+
+
+        <TerrenoLineasMultiples />
 
 
 

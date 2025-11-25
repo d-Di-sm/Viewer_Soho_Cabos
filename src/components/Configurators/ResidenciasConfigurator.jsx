@@ -15,6 +15,7 @@ const ResidenciasConfigurator = () => {
     //     }
     // }, [cameraMode, setTipologyResidencias])
 
+    
     const handleSwitchChange = (newValues) => {
         if (cameraMode === CameraModes.RESIDENCIAS) {
             setTipologyResidencias(newValues)
